@@ -47,14 +47,14 @@ public final class VaultEconHandler implements IEconHandler {
         if(shouldUsePlayerAccount(uuid, isPlayer)) {
             OfflinePlayer p = Bukkit.getOfflinePlayer(uuid);
             if(getEcon().getBalance(p) > amount)
-                return getEcon().withdrawPlayer(p, amount- getEcon().getBalance(p)).transactionSuccess();
+                return getEcon().withdrawPlayer(p, getEcon().getBalance(p)-amount).transactionSuccess();
             else
-                return getEcon().depositPlayer(p, getEcon().getBalance(p)-amount).transactionSuccess();
+                return getEcon().depositPlayer(p, amount-getEcon().getBalance(p)).transactionSuccess();
         } else {
             if(getEcon().bankBalance(uuid.toString()).balance > amount)
-                return getEcon().bankWithdraw(uuid.toString(), amount- getEcon().bankBalance(uuid.toString()).balance).transactionSuccess();
+                return getEcon().bankWithdraw(uuid.toString(), getEcon().bankBalance(uuid.toString()).balance-amount).transactionSuccess();
             else
-                return getEcon().bankDeposit(uuid.toString(), getEcon().bankBalance(uuid.toString()).balance-amount).transactionSuccess();
+                return getEcon().bankDeposit(uuid.toString(), amount-getEcon().bankBalance(uuid.toString()).balance).transactionSuccess();
         }
     }
 
