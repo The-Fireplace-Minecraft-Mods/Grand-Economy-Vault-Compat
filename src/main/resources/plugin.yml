@@ -1,0 +1,8 @@
+name: Grand-Economy-Vault-Integration
+main: the_fireplace.grandeconomy.vaultcompat.GrandEconomyVaultCompat
+version: @version@
+author: The_Fireplace
+description: Vault integration plugin for Grand Economy.
+website:
+depend:
+  - Vault
