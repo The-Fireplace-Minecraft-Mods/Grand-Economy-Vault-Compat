@@ -51,7 +51,7 @@ public final class OtherEconHandler implements Economy {
 
     @Override
     public String format(double v) {
-        return GrandEconomyApi.toString((long)v);
+        return GrandEconomyApi.getFormattedCurrency(v);
     }
 
     @Override
@@ -66,12 +66,12 @@ public final class OtherEconHandler implements Economy {
 
     @Override
     public boolean hasAccount(String s) {
-        return GrandEconomyApi.ensureAccountExists(getId(s), null);
+        return true;
     }
 
     @Override
     public boolean hasAccount(OfflinePlayer offlinePlayer) {
-        return GrandEconomyApi.ensureAccountExists(offlinePlayer.getUniqueId(), null);
+        return true;
     }
 
     @Override
@@ -126,9 +126,9 @@ public final class OtherEconHandler implements Economy {
 
     @Override
     public EconomyResponse withdrawPlayer(String s, double v) {
-        boolean b = GrandEconomyApi.takeFromBalance(getId(s), (long)v, null);
+        boolean b = GrandEconomyApi.takeFromBalance(getId(s), v, null);
         return new EconomyResponse(
-            (long)v,
+            v,
             getBalance(s),
             b ? EconomyResponse.ResponseType.SUCCESS : EconomyResponse.ResponseType.FAILURE,
             null
@@ -137,9 +137,9 @@ public final class OtherEconHandler implements Economy {
 
     @Override
     public EconomyResponse withdrawPlayer(OfflinePlayer offlinePlayer, double v) {
-        boolean b =  GrandEconomyApi.takeFromBalance(offlinePlayer.getUniqueId(), (long)v, null);
+        boolean b =  GrandEconomyApi.takeFromBalance(offlinePlayer.getUniqueId(), v, null);
         return new EconomyResponse(
-            (long)v,
+            v,
             getBalance(offlinePlayer),
             b ? EconomyResponse.ResponseType.SUCCESS : EconomyResponse.ResponseType.FAILURE,
             null
@@ -158,9 +158,9 @@ public final class OtherEconHandler implements Economy {
 
     @Override
     public EconomyResponse depositPlayer(String s, double v) {
-        boolean b = GrandEconomyApi.addToBalance(getId(s), (long)v, null);
+        boolean b = GrandEconomyApi.addToBalance(getId(s), v, null);
         return new EconomyResponse(
-            (long)v,
+            v,
             getBalance(s),
             b ? EconomyResponse.ResponseType.SUCCESS : EconomyResponse.ResponseType.FAILURE,
             null
@@ -169,9 +169,9 @@ public final class OtherEconHandler implements Economy {
 
     @Override
     public EconomyResponse depositPlayer(OfflinePlayer offlinePlayer, double v) {
-        boolean b = GrandEconomyApi.addToBalance(offlinePlayer.getUniqueId(), (long)v, null);
+        boolean b = GrandEconomyApi.addToBalance(offlinePlayer.getUniqueId(), v, null);
         return new EconomyResponse(
-            (long)v,
+            v,
             getBalance(offlinePlayer),
             b ? EconomyResponse.ResponseType.SUCCESS : EconomyResponse.ResponseType.FAILURE,
             null
@@ -210,7 +210,7 @@ public final class OtherEconHandler implements Economy {
 
     @Override
     public EconomyResponse bankHas(String s, double v) {
-        return new EconomyResponse((long)v, getBalance(s), EconomyResponse.ResponseType.SUCCESS, null);
+        return new EconomyResponse(v, getBalance(s), EconomyResponse.ResponseType.SUCCESS, null);
     }
 
     @Override

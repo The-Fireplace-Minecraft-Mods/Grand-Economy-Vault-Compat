@@ -11,7 +11,7 @@ public final class GrandEconomyVaultCompat extends JavaPlugin {
     @Override
     public void onEnable() {
         super.onEnable();
-        if(!Lists.newArrayList("bukkit", "vault").contains(GrandEconomy.cfg.economyBridge.toLowerCase()))
+        if(!Lists.newArrayList("bukkit", "vault").contains(GrandEconomy.globalConfig.economyBridge.toLowerCase()))
             Bukkit.getServer().getServicesManager().register(Economy.class, new OtherEconHandler(this), this, ServicePriority.High);
         else
             //noinspection deprecation

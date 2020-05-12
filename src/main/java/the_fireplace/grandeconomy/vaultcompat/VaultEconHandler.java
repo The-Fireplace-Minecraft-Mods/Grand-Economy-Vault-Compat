@@ -19,15 +19,15 @@ public final class VaultEconHandler implements IEconHandler {
     }
 
     @Override
-    public long getBalance(UUID uuid, Boolean isPlayer) {
+    public double getBalance(UUID uuid, Boolean isPlayer) {
         if(shouldUsePlayerAccount(uuid, isPlayer))
-            return (long) getEcon().getBalance(Bukkit.getOfflinePlayer(uuid));
+            return getEcon().getBalance(Bukkit.getOfflinePlayer(uuid));
         else
-            return (long) getEcon().bankBalance(uuid.toString()).balance;
+            return getEcon().bankBalance(uuid.toString()).balance;
     }
 
     @Override
-    public boolean addToBalance(UUID uuid, long amount, Boolean isPlayer) {
+    public boolean addToBalance(UUID uuid, double amount, Boolean isPlayer) {
         if(shouldUsePlayerAccount(uuid, isPlayer))
             return getEcon().depositPlayer(Bukkit.getOfflinePlayer(uuid), amount).transactionSuccess();
         else
@@ -35,7 +35,7 @@ public final class VaultEconHandler implements IEconHandler {
     }
 
     @Override
-    public boolean takeFromBalance(UUID uuid, long amount, Boolean isPlayer) {
+    public boolean takeFromBalance(UUID uuid, double amount, Boolean isPlayer) {
         if(shouldUsePlayerAccount(uuid, isPlayer))
             return getEcon().withdrawPlayer(Bukkit.getOfflinePlayer(uuid), amount).transactionSuccess();
         else
@@ -43,7 +43,7 @@ public final class VaultEconHandler implements IEconHandler {
     }
 
     @Override
-    public boolean setBalance(UUID uuid, long amount, Boolean isPlayer) {
+    public boolean setBalance(UUID uuid, double amount, Boolean isPlayer) {
         if(shouldUsePlayerAccount(uuid, isPlayer)) {
             OfflinePlayer p = Bukkit.getOfflinePlayer(uuid);
             if(getEcon().getBalance(p) > amount)
@@ -59,26 +59,13 @@ public final class VaultEconHandler implements IEconHandler {
     }
 
     @Override
-    public String getCurrencyName(long amount) {
+    public String getCurrencyName(double amount) {
         return amount == 1 ? getEcon().currencyNameSingular() : getEcon().currencyNamePlural();
     }
 
     @Override
-    public String toString(long amount) {
+    public String getFormattedCurrency(double amount) {
         return getEcon().format(amount);
-    }
-
-    @Override
-    public boolean ensureAccountExists(UUID uuid, Boolean isPlayer) {
-        if(shouldUsePlayerAccount(uuid, isPlayer))
-            return getEcon().hasAccount(Bukkit.getOfflinePlayer(uuid)) || getEcon().createPlayerAccount(Bukkit.getOfflinePlayer(uuid));
-        else
-            return getEcon().getBanks().contains(uuid.toString()) || getEcon().createBank(uuid.toString(), Bukkit.getOfflinePlayer(uuid)).transactionSuccess();
-    }
-
-    @Override
-    public Boolean forceSave(UUID uuid, Boolean isPlayer) {
-        return null;
     }
 
     @Override
