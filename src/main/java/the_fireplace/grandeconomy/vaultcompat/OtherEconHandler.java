@@ -21,11 +21,13 @@ public final class OtherEconHandler implements Economy {
     private static UUID getId(String s) {
         try {
             Player player = Bukkit.getServer().getPlayer(s);
-            if(player != null)
+            if (player != null) {
                 return player.getUniqueId();
+            }
             return UUID.fromString(s);
         } catch(IllegalArgumentException e) {
-            return null;
+            OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(s);
+            return offlinePlayer.getUniqueId();
         }
     }
 
@@ -66,7 +68,7 @@ public final class OtherEconHandler implements Economy {
 
     @Override
     public boolean hasAccount(String s) {
-        return true;
+        return getId(s) != null;
     }
 
     @Override
@@ -86,7 +88,12 @@ public final class OtherEconHandler implements Economy {
 
     @Override
     public double getBalance(String s) {
-        return GrandEconomyApi.getBalance(getId(s), null);
+        UUID accountId = getId(s);
+        if (accountId == null) {
+            Bukkit.getLogger().warning("Account not found for name '" + s + "'");
+            return 0;
+        }
+        return GrandEconomyApi.getBalance(accountId, null);
     }
 
     @Override
@@ -126,12 +133,18 @@ public final class OtherEconHandler implements Economy {
 
     @Override
     public EconomyResponse withdrawPlayer(String s, double v) {
-        boolean b = GrandEconomyApi.takeFromBalance(getId(s), v, null);
+        UUID accountId = getId(s);
+        String errorMessage = null;
+        if (accountId == null) {
+            errorMessage = "Account not found for name '" + s + "'";
+            Bukkit.getLogger().warning(errorMessage);
+        }
+        boolean b = accountId != null && GrandEconomyApi.takeFromBalance(accountId, v, null);
         return new EconomyResponse(
             v,
             getBalance(s),
             b ? EconomyResponse.ResponseType.SUCCESS : EconomyResponse.ResponseType.FAILURE,
-            null
+            errorMessage
         );
     }
 
@@ -158,12 +171,18 @@ public final class OtherEconHandler implements Economy {
 
     @Override
     public EconomyResponse depositPlayer(String s, double v) {
-        boolean b = GrandEconomyApi.addToBalance(getId(s), v, null);
+        UUID accountId = getId(s);
+        String errorMessage = null;
+        if (accountId == null) {
+            errorMessage = "Account not found for name '" + s + "'";
+            Bukkit.getLogger().warning(errorMessage);
+        }
+        boolean b = accountId != null && GrandEconomyApi.addToBalance(accountId, v, null);
         return new EconomyResponse(
             v,
             getBalance(s),
             b ? EconomyResponse.ResponseType.SUCCESS : EconomyResponse.ResponseType.FAILURE,
-            null
+            errorMessage
         );
     }
 

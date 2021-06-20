@@ -1,1 +1,1 @@
-Updated for Grand Economy 2.0.0
+Fix issue with nonexistant accounts causing NPEs
